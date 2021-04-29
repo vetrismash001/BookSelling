@@ -1,0 +1,19 @@
+<% include hf/header %>
+<% include log-reg1 %>
+<div class="container mt-5" style="width: 80%;">
+    <div class="row">
+        <% data.forEach(function(d){ %>
+            <div class="col-lg-3 col-sm-6 col-12">
+                <div class="card mb-3">
+                    <img src="<%= d.image %>" class="card-img-top">
+                    <div class="card-body">
+                       <h5 class="card-title"><%= d.name %></h5>
+                       <p class="card-text">$<%= d.price %></p>
+                       <a href="/book/<%= d._id %>" class="btn btn-primary">More Info</a>
+                    </div>
+                </div>
+            </div>
+        <% }) %>
+    </div>
+</div>
+<% include hf/footer %>

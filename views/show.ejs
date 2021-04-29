@@ -1,0 +1,84 @@
+<% include hf/header %>
+<% include log-reg %>
+<% include login %>
+<% include register %>
+<div class="container d-flex mt-5" style="width: 75%">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="border rounded mt-3">
+               <h3 class="text-info text-center pt-2">Price</h3>
+               <hr>
+               <h4 class="text-center">$<%= data.price %></h4>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="card">
+                <img src="<%= data.image %>" class="card-img-top">
+                <div class="card-body">
+                    <a href=""><h3 class="card-title"><%= data.name %></h3></a>  
+                    <p class="card-text"><%- data.desc %></p>
+                </div>
+            </div>
+            <div class="jumbotron mt-3"  style="padding: 0">
+                <div style="padding: 20px 32px 0 32px">
+                    <div class="d-flex justify-content-end" style="padding-top: 0">
+                        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                            Leave a Review
+                        </button>
+                    </div>
+                </div>
+                <div class="collapse" id="collapseExample">
+                    <div class="d-flex justify-content-center">
+                        <% if(currentUser) { %>
+                            <form class="input-group mt-4 mb-3" style="width: 90%;" action="/comment/<%= data._id %>" method="POST">
+                                <input type="text" class="form-control" placeholder="comment" name="comment" aria-label="comment" aria-describedby="button-addon2">
+                                <button class="btn btn-outline-primary" id="button-addon2">Post</button>
+                            </form>
+                        <% } else { %>
+                            <div class="alert alert-primary alert-dismissible fade show" role="alert">
+                                <strong>Sorry!</strong> You must <a style="cursor: pointer;text-decoration: underline;" data-toggle="modal" data-target="#exampleModalCenter">login</a> or <a style="cursor: pointer;text-decoration: underline;" data-toggle="modal" data-target="#exampleModalCenter1">register</a> to comment
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                   <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        <% } %>
+                    </div>
+                </div>
+                <hr>
+                <div style="padding: 0 32px 20px 32px">
+                    <% data["comments"].forEach(function(com) { %>
+                        <div class="d-flex justify-content-between" style="height: 30px">
+                            <p><strong><%= com.author %></strong></p>
+                            <!-- Default dropup button -->
+                            <div class="btn-group dropup">
+                                <a data-toggle="dropdown" style="cursor: pointer;" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fas fa-ellipsis-v"></i>
+                                </a>
+                                <div class="dropdown-menu">
+                                    <% if(currentUser && currentUser.username === com.author) { %>
+                                        <form method="POST" action="/comment/<%= com._id %>/delete">
+                                            <button class="dropdown-item">Delete</button>
+                                        </form>
+                                        <form method="POST" action="/comment/<%= com._id %>/edit">
+                                            <button class="dropdown-item">Edit</button>
+                                        </form>
+                                    <% } %>
+                                    <a class="dropdown-item" href="#">Report</a>
+                                </div>
+                            </div>   
+                        </div>
+                        <% if(edcom!=com._id) { %>
+                        <p><%= com.text %></p>
+                        <% } else { %>
+                            <form class="input-group mt-2 mb-3" style="width: 90%;" action="/comment/<%= com._id %>/edit1" method="POST">
+                                <input type="text" class="form-control" value="<%= com.text %>" name="ecomment" aria-label="comment" aria-describedby="button-addon2">
+                                <button class="btn btn-outline-primary" id="button-addon2">Post</button>
+                            </form>
+                        <% } %>
+                    <% }) %>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<% include hf/footer %>
